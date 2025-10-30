@@ -1,0 +1,51 @@
+# Cloudflare Workers configuration
+name = "vanced-chatbot-git"
+main = "src/worker.js"
+compatibility_date = "2024-01-15"
+
+# Environment variables
+[env.production.vars]
+# Thêm các environment variables vào Cloudflare Dashboard > Workers > Settings > Environment Variables:
+# OPENROUTER_API_KEY = your-openrouter-api-key
+# APPS_SCRIPT_URL = https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec
+
+# Development environment
+[env.development]
+vars = { }
+
+# Build configuration
+[build]
+command = ""
+
+# Routes (nếu cần custom domain)
+# routes = [
+#   { pattern = "chat.yourdomain.com/*", zone_name = "yourdomain.com" }
+# ]
+
+# Durable Objects configuration
+[[durable_objects.bindings]]
+name = "P2P_SIGNALING_ROOM"
+class_name = "P2PSignalingRoom"
+
+# Durable Objects migrations (SQLite for Free Plan)
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["P2PSignalingRoom"]
+
+# KV namespaces (cho future chat history storage)
+# kv_namespaces = [
+#   { binding = "CHAT_HISTORY", id = "8fb44eea85a94f6b8e5e5a6b5b402f12", preview_id = "your-preview-kv-namespace-id" }
+# ]
+
+# Compatibility flags
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
